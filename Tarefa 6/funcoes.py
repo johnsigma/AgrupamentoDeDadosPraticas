@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import random
 
-def distancia(obj1, obj2, dist=1):
+def distancia(obj1, obj2, dist=2):
   
   lista = []
 
@@ -43,14 +43,13 @@ def output_txt(listas):
   f.close()
 
 def centroides(k, data):
-  np.random.seed(200)
   centroides = []
   while True:
     n = random.randrange(0, data.shape[0])
     if n not in centroides:
       centroides.append(n)
     if len(centroides) == k:
-      return (centroides)
+      return centroides
 
 def percorre(data, centros):
   lista_dist = []
@@ -70,3 +69,18 @@ def distancia_centroide(k,df):
             valor_min = min(inter)
             distancias.append(valor_min)
             print(distancias)
+            
+def agrup_inicial(centroides, df=df):
+  clusters = {n: 0 for n in range(0,df.shape[0])}
+  for i in range(0, df.shape[0]):
+    distancias = []
+    for e, m in enumerate(centroides):
+      dist = distancia(df.iloc[i], df.iloc[m])
+      distancias.append(dist)
+      if (e+1) == len(centroides):
+        menor = min(distancias)
+        for b, c in zip(distancias, centroides):
+          if menor == b:
+            clusters[i] = c
+            break
+  return clusters
